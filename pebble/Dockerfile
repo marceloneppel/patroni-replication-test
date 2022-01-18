@@ -7,6 +7,7 @@ RUN git clone https://github.com/canonical/pebble \
     && go build ./cmd/pebble
 
 FROM test-patroni
+USER root
 COPY --from=0 /pebble/pebble /usr/bin/pebble
 RUN mkdir /home/postgres/pebble
 ENV PEBBLE /home/postgres/pebble
