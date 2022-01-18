@@ -10,19 +10,19 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     ## Make sure we have a en_US.UTF-8 locale available
     && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
     && pip3 install setuptools \
-    && pip3 install 'git+https://github.com/zalando/patroni.git#egg=patroni[kubernetes]' \
+    && pip3 install 'git+https://github.com/zalando/patroni.git@v2.1.2#egg=patroni[kubernetes]' \
     && PGHOME=/home/postgres \
     && mkdir -p $PGHOME \
     && chown postgres $PGHOME \
     && sed -i "s|/var/lib/postgresql.*|$PGHOME:/bin/bash|" /etc/passwd \
-    # Set permissions for OpenShift
+    # Set permissions
     && chmod 775 $PGHOME \
     && chmod 664 /etc/passwd \
     # Clean up
     && apt-get remove -y git python3-pip python3-wheel \
     && apt-get autoremove -y \
     && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/* /root/.cache
+    && rm -rf /root/.cache
 
 ADD patroni.yml /home/postgres
 

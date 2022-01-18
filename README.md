@@ -118,6 +118,17 @@ kubectl exec pod/patronidemo-2 -- ps aux | grep defunct || true
 postgres      35  0.0  0.0      0     0 ?        Z    21:11   0:00 [postgres] <defunct>
 ```
 
+## Testing Patroni with Supervisord starting it
+
+Firstly you run the command to deploy the pods with supervisord being the entrypoint. This time supervisord starts patroni (we run `make clean` first in order to remove the previous deployment):
+
+```sh
+make clean
+make supervisord
+```
+
+Then, we can check the logs the same way the other times and we'll see that this time the automatic failover will be done correctly as the first time.
+
 ## Known issues
 
 If you see a message like the one below when running `make patroni` or `make pebble`, just run `make clean` and rerun the original command.
