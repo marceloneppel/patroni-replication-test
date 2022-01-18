@@ -1,4 +1,4 @@
-.PHONY: patroni pebble
+.PHONY: patroni pebble supervisord
 
 dependencies:
 	sudo apt-get update
@@ -16,14 +16,19 @@ clean:
 build:
 	docker build -t test-patroni patroni
 	docker build -t test-pebble pebble
+	docker build -t test-supervisord supervisord
 	docker save test-patroni | microk8s ctr images import -
-	docker save test-pebble | microk8s ctr images import -	
+	docker save test-pebble | microk8s ctr images import -
+	docker save test-supervisord | microk8s ctr images import -
 
 patroni:
 	IMAGE=test-patroni envsubst < k8s.yaml | kubectl apply -f -
 
 pebble:
 	IMAGE=test-pebble envsubst < k8s.yaml | kubectl apply -f -
+
+supervisord:
+	IMAGE=test-supervisord envsubst < k8s.yaml | kubectl apply -f -
 
 crash-leader:
 	for n in $$(seq 0 2); do \
