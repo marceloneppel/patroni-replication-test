@@ -40,6 +40,22 @@ crash-leader:
 		fi \
 	done
 
+failover:
+	for n in $$(seq 0 2); do \
+		ip=$$(kubectl get pod patronidemo-$$n -o custom-columns=ip:.status.podIP); \
+		status=$$(curl -s -w "\n%{http_code}\n" $$ip:8008 |sed -n '4 p'); \
+		if [ $$status = 200 ]; then \
+			candidate="patronidemo-0"; \
+			if [ $$n = 0 ]; then \
+				candidate="patronidemo-1"; \
+			fi; \
+			ip=$$(echo $$ip | sed -e "s/ip //g"); \
+			response=$$(curl -s $$ip:8008/failover -XPOST -d "{\"candidate\":\"$${candidate}\"}"); \
+			echo $$response; \
+			break; \
+		fi \
+	done
+
 logs:
 	kubectl exec pod/patronidemo-0 -- tail -2 patroni.log
 	@echo ""
