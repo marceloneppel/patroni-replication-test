@@ -129,6 +129,16 @@ make supervisord
 
 Then, we can check the logs the same way the other times and we'll see that this time the automatic failover will be done correctly as the first time.
 
+## Triggering a manual failover
+
+You can also check the a similar issue (zombie process preventing some operation) if you try to trigger a manual failover using:
+
+```sh
+make failover
+```
+
+When using the pebble example, you'll face a situation where we can't complete the failover because of the zombie process.
+
 ## Known issues
 
 If you see a message like the one below when running `make patroni` or `make pebble`, just run `make clean` and rerun the original command.
