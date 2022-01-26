@@ -4,6 +4,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && apt install git golang -y
 RUN git clone https://github.com/canonical/pebble \
     && cd pebble \
+    && git checkout set-child-subreaper \
     && go build ./cmd/pebble
 
 FROM test-patroni
