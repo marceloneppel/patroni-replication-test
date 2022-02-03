@@ -56,6 +56,11 @@ failover:
 		fi \
 	done
 
+ips:
+	@kubectl describe pod/patronidemo-0 | grep ^IP:
+	@kubectl describe pod/patronidemo-1 | grep ^IP:
+	@kubectl describe pod/patronidemo-2 | grep ^IP:
+
 logs:
 	kubectl exec pod/patronidemo-0 -- tail -2 patroni.log
 	@echo ""
