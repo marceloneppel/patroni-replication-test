@@ -2,8 +2,9 @@ FROM ubuntu:focal
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get update -y \
     && apt install git golang -y
-RUN git clone https://github.com/canonical/pebble \
+RUN git clone https://github.com/benhoyt/pebble \
     && cd pebble \
+    && git checkout reap-zombies \
     && go build ./cmd/pebble
 
 FROM test-patroni
